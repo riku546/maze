@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Maze } from './type';
-
 
 const useMaze = () => {
   const [maze, setMaze] = useState<Maze>();
 
   const generateMaze = (): Maze => {};
 
-  return {};
+  useEffect(() => {
+    const generatedMaze = generateMaze();
+    setMaze(generatedMaze);
+  }, []);
+
+  return { maze };
 };
 
 export default useMaze;

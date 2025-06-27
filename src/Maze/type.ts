@@ -1,1 +1,2 @@
-export type Maze = number[][];
+export type MazeElement = 'wall' | 'path' | 'start' | 'end';
+export type Maze = MazeElement[][];
