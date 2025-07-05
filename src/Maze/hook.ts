@@ -1,17 +1,30 @@
 import { useEffect, useState } from 'react';
-import type { Maze } from './type';
+import { generateMaze } from './lib';
+import { mazeSizeOptions, type Maze, type MazeSizeType } from './type';
 
 const useMaze = () => {
-  const [maze, setMaze] = useState<Maze>();
+  //奇数じゃないといけない
 
-  const generateMaze = (): Maze => {};
+  const [mazeType, setMazeType] = useState<MazeSizeType>('hard');
+
+  const [maze, setMaze] = useState<Maze | undefined>(undefined);
+
+  const regenerateMaze = (type: MazeSizeType) => {
+    const maze = generateMaze(mazeSizeOptions[type]);
+    setMaze(maze);
+  };
+
+  const startSearchRoute = (mazeLocal: Maze) => {
+    const mazeCopy = structuredClone(mazeLocal);
+    mazeCopy[0][0] = 'route';
+    setMaze(mazeCopy);
+  };
 
   useEffect(() => {
-    const generatedMaze = generateMaze();
-    setMaze(generatedMaze);
-  }, []);
+    setMaze(generateMaze(mazeSizeOptions[mazeType]));
+  }, [mazeType]);
 
-  return { maze };
+  return { maze, mazeType, regenerateMaze, startSearchRoute, setMazeType };
 };
 
 export default useMaze;
