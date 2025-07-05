@@ -1,7 +1,6 @@
 export type MazeElement = 'wall' | 'path' | 'goal' | 'start' | 'route';
 export type Maze = MazeElement[][];
 
-
 export const mazeSizeOptions = {
   easy: 21,
   medium: 51,

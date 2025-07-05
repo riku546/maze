@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import useMaze from '../Maze/hook';
 import { displayRouteInMaze } from '../Maze/lib';
 import useUser from '../user/hook';
+import { initialUserInfo } from '../user/type';
 import Cell from './components/cell';
 import ConfettiComponent from './components/confetti';
 import BasicModal from './components/modal';
@@ -12,8 +13,8 @@ import MazeSizeSelect from './components/select';
 import styles from './page.module.css';
 
 export default function Home() {
-  const { maze, mazeType, regenerateMaze, startSearchRoute ,setMazeType} = useMaze();
-  const { userInfo, initialUserInfo, updateUserInfo } = useUser();
+  const { maze, mazeType, regenerateMaze, startSearchRoute, setMazeType } = useMaze();
+  const { userInfo, updateUserInfo } = useUser();
 
   // 早期リターンの前にフックは必ず呼び出す
 
@@ -34,8 +35,13 @@ export default function Home() {
     <div className={styles.container}>
       <ConfettiComponent isRun={isFinishedSearch} />
       <div className={styles.gameHeader}>
-        <BasicModal  maze={maze} startSearchRoute={startSearchRoute} disabled={isFinishedSearch} />
-        <MazeSizeSelect mazeType={mazeType} regenerateMaze={regenerateMaze} disabled={isFinishedSearch} setMazeType={setMazeType} />
+        <BasicModal maze={maze} startSearchRoute={startSearchRoute} disabled={isFinishedSearch} />
+        <MazeSizeSelect
+          mazeType={mazeType}
+          regenerateMaze={regenerateMaze}
+          disabled={isFinishedSearch}
+          setMazeType={setMazeType}
+        />
         <div className={styles.reloadIcon} onClick={() => window.location.reload()}>
           <ReplayIcon />
         </div>

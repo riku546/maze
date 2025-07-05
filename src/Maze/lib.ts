@@ -1,4 +1,4 @@
-import type { InitialUserInfo, UserDirection, UserInfo } from '../user/hook';
+import type { InitialUserInfo, UserDirection, UserInfo } from '../user/type';
 import type { Maze, MazeSizes } from './type';
 
 const directions = {

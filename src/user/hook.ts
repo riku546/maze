@@ -1,21 +1,7 @@
 import { useState } from 'react';
 import { stepInto } from '../Maze/lib';
 import type { Maze } from '../Maze/type';
-export type UserDirection = 'up' | 'down' | 'left' | 'right';
-
-export interface UserInfo {
-  positionX: number;
-  positionY: number;
-  directionType: UserDirection;
-}
-
-export const initialUserInfo = {
-  positionX: 0,
-  positionY: 0,
-  directionType: 'right',
-} as const;
-
-export type InitialUserInfo = typeof initialUserInfo;
+import type { UserInfo } from './type';
 
 const useUser = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -43,7 +29,7 @@ const useUser = () => {
     });
   };
 
-  return { userInfo, initialUserInfo, updateUserInfo };
+  return { userInfo, updateUserInfo };
 };
 
 export default useUser;

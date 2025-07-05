@@ -1,21 +1,21 @@
 .container {
   display: flex;
   flex-direction: column;
+  gap: 10px;
   align-items: center;
   justify-content: center;
   height: 100vh;
   min-height: 100vh;
   padding: 0 0.5rem;
   border: 1px solid #000;
-  gap: 10px;
 }
 
 .gameHeader {
-  width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 20px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .mazeBoard {
@@ -27,11 +27,11 @@
 }
 
 .reloadIcon {
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   background-color: #1976d2;
   border-radius: 20px;
