@@ -1,25 +1,54 @@
 'use client';
 
-import { useState } from 'react';
-import styles from './page.module.css';
+import ReplayIcon from '@mui/icons-material/Replay';
+import { useEffect } from 'react';
 import useMaze from '../Maze/hook';
+import { displayRouteInMaze } from '../Maze/lib';
+import useUser from '../user/hook';
+import Cell from './components/cell';
+import ConfettiComponent from './components/confetti';
+import BasicModal from './components/modal';
+import MazeSizeSelect from './components/select';
+import styles from './page.module.css';
 
-type UserInfo = {
-  positionX: number;
-  positionY: number;
-}
 export default function Home() {
-  const [userInfo , setUserInfo] = useState<UserInfo>({
-    positionX: 0,
-    positionY: 0,
-  })
+  const { maze, mazeType, regenerateMaze, startSearchRoute ,setMazeType} = useMaze();
+  const { userInfo, initialUserInfo, updateUserInfo } = useUser();
 
-  const { maze } = useMaze();
-  console.log(maze);
+  // 早期リターンの前にフックは必ず呼び出す
+
+  const isFinishedSearch = maze?.[userInfo.positionY]?.[userInfo.positionX] === 'goal';
+
+  useEffect(() => {
+    // maze が未定義 or スタートセル or 探索完了時は何もしない
+    if (!maze || maze[0][0] === 'start' || isFinishedSearch) return;
+
+    const interval = setInterval(() => updateUserInfo(maze), 1);
+
+    return () => clearInterval(interval);
+  }, [maze, updateUserInfo, isFinishedSearch]);
+
+  if (!maze) return <div />;
 
   return (
     <div className={styles.container}>
-      <h1>hello</h1>
+      <ConfettiComponent isRun={isFinishedSearch} />
+      <div className={styles.gameHeader}>
+        <BasicModal  maze={maze} startSearchRoute={startSearchRoute} disabled={isFinishedSearch} />
+        <MazeSizeSelect mazeType={mazeType} regenerateMaze={regenerateMaze} disabled={isFinishedSearch} setMazeType={setMazeType} />
+        <div className={styles.reloadIcon} onClick={() => window.location.reload()}>
+          <ReplayIcon />
+        </div>
+      </div>
+      <div className={styles.mazeBoard}>
+        {displayRouteInMaze(maze, userInfo, initialUserInfo).map((row, rowIndex) => (
+          <div key={rowIndex} className={styles.row}>
+            {row.map((cell, cellIndex) => (
+              <Cell key={cellIndex} mazeType={mazeType} cell={cell} />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
