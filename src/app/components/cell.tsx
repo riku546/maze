@@ -15,6 +15,7 @@ const Cell = ({ mazeType, cell }: { mazeType: MazeSizeType; cell: MazeElement })
     hard: { width: '8px', height: '8px' },
     extreme: { width: '7px', height: '7px' },
   };
+
   return (
     <div
       style={{

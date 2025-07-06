@@ -15,4 +15,4 @@ export const searchSpeed = {
   medium: 10,
   hard: 1,
   extreme: 1,
-}as const;
+} as const;
