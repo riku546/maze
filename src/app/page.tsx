@@ -4,6 +4,7 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import { useEffect } from 'react';
 import useMaze from '../Maze/hook';
 import { displayRouteInMaze } from '../Maze/lib';
+import { searchSpeed } from '../Maze/type';
 import useUser from '../user/hook';
 import { initialUserInfo } from '../user/type';
 import Cell from './components/cell';
@@ -22,12 +23,17 @@ export default function Home() {
 
   useEffect(() => {
     // maze が未定義 or スタートセル or 探索完了時は何もしない
-    if (!maze || maze[0][0] === 'start' || isFinishedSearch) return;
+    if (!maze || maze[0][0] === 'start') return;
 
-    const interval = setInterval(() => updateUserInfo(maze), 1);
+    const interval = setInterval(() => updateUserInfo(maze), searchSpeed[mazeType]);
+
+    if (isFinishedSearch) {
+      clearInterval(interval);
+      return;
+    }
 
     return () => clearInterval(interval);
-  }, [maze, updateUserInfo, isFinishedSearch]);
+  }, [maze, updateUserInfo, isFinishedSearch, mazeType]);
 
   if (!maze) return <div />;
 
