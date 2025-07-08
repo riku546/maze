@@ -10,9 +10,9 @@ export const mazeSizeOptions = {
 export type MazeSizeType = keyof typeof mazeSizeOptions;
 export type MazeSizes = (typeof mazeSizeOptions)[MazeSizeType];
 
-export const searchSpeed = {
+export const searchSpeed: { [key in MazeSizeType]: number } = {
   easy: 50,
   medium: 10,
   hard: 1,
   extreme: 1,
-} as const;
+};
