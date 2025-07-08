@@ -1,7 +1,7 @@
 import type { MazeElement, MazeSizeType } from '../../Maze/type';
 
 const Cell = ({ mazeType, cell }: { mazeType: MazeSizeType; cell: MazeElement }) => {
-  const backgroundColor: Record<MazeElement, string> = {
+  const backgroundColor: { [key in MazeElement]: string } = {
     wall: 'black',
     route: 'green',
     path: 'white',
@@ -9,7 +9,7 @@ const Cell = ({ mazeType, cell }: { mazeType: MazeSizeType; cell: MazeElement })
     goal: 'red',
   };
 
-  const sizes: Record<MazeSizeType, { width: string; height: string }> = {
+  const sizes: { [key in MazeSizeType]: { width: string; height: string } } = {
     easy: { width: '30px', height: '30px' },
     medium: { width: '12px', height: '12px' },
     hard: { width: '8px', height: '8px' },
