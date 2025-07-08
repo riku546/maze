@@ -29,27 +29,22 @@ const upperLeft = {
   right: 'up',
 } as const;
 
-interface FrontWall {
+interface StepBase {
+  newPositionY: number;
+  newPositionX: number;
+  newDirection: UserDirection;
+}
+
+interface FrontWall extends StepBase {
   type: 'changeDirection';
-  newPositionY: number;
-  newPositionX: number;
-
-  newDirection: UserDirection;
 }
 
-interface LeftIspath {
+interface LeftIspath extends StepBase {
   type: 'forwardAndChangeDicrection';
-  newPositionY: number;
-  newPositionX: number;
-
-  newDirection: UserDirection;
 }
-interface Forward {
-  type: 'forward';
-  newPositionY: number;
-  newPositionX: number;
 
-  newDirection: UserDirection;
+interface Forward extends StepBase {
+  type: 'forward';
 }
 
 type StepIntoResponse = Forward | FrontWall | LeftIspath;
@@ -59,7 +54,9 @@ export const findRoute = (maze: Maze, userInfo: UserInfo) => {
 
   let { positionX, positionY, directionType } = structuredClone(userInfo);
 
-  const route = [{ y: 0, x: 0, direction: 'right' }];
+  const route: { y: number; x: number; direction: UserDirection }[] = [
+    { y: 0, x: 0, direction: 'right' },
+  ];
 
   while (maze[positionY][positionX] !== 'goal') {
     const newUserInfo = stepInto(maze, positionY, positionX, directionType);
