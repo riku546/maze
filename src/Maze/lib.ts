@@ -1,53 +1,6 @@
+import { directions, stepInto } from '../user/lib';
 import type { InitialUserInfo, UserDirection, UserInfo } from '../user/type';
 import type { Maze, MazeSizes } from './type';
-
-const directions = {
-  up: { y: -1, x: 0 },
-  down: { y: 1, x: 0 },
-  left: { y: 0, x: -1 },
-  right: { y: 0, x: 1 },
-} as const;
-
-const left = {
-  up: { y: 0, x: -1 },
-  down: { y: 0, x: 1 },
-  left: { y: 1, x: 0 },
-  right: { y: -1, x: 0 },
-} as const;
-
-const frontWall = {
-  up: 'right',
-  down: 'left',
-  left: 'up',
-  right: 'down',
-} as const;
-
-const upperLeft = {
-  up: 'left',
-  down: 'right',
-  left: 'down',
-  right: 'up',
-} as const;
-
-interface StepBase {
-  newPositionY: number;
-  newPositionX: number;
-  newDirection: UserDirection;
-}
-
-interface FrontWall extends StepBase {
-  type: 'changeDirection';
-}
-
-interface LeftIspath extends StepBase {
-  type: 'forwardAndChangeDicrection';
-}
-
-interface Forward extends StepBase {
-  type: 'forward';
-}
-
-type StepIntoResponse = Forward | FrontWall | LeftIspath;
 
 export const findRoute = (maze: Maze, userInfo: UserInfo) => {
   maze[0][0] = 'path';
@@ -59,70 +12,21 @@ export const findRoute = (maze: Maze, userInfo: UserInfo) => {
   ];
 
   while (maze[positionY][positionX] !== 'goal') {
-    const newUserInfo = stepInto(maze, positionY, positionX, directionType);
+    const { newPositionX, newPositionY, newDirection } = stepInto(
+      maze,
+      positionY,
+      positionX,
+      directionType,
+    );
 
-    positionX = newUserInfo.newPositionX;
-    positionY = newUserInfo.newPositionY;
-    directionType = newUserInfo.newDirection;
+    positionX = newPositionX;
+    positionY = newPositionY;
+    directionType = newDirection;
 
     route.push({ y: positionY, x: positionX, direction: directionType });
   }
 
   return route;
-};
-
-const isOutInMaze = (maze: Maze, positionX: number, positionY: number) => {
-  return positionX < 0 || positionX >= maze.length || positionY < 0 || positionY >= maze.length;
-};
-
-export const stepInto = (
-  maze: Maze,
-  positionY: number,
-  positionX: number,
-  di: UserDirection,
-): StepIntoResponse => {
-  const nextPositionY = positionY + directions[di].y;
-  const nextPositionX = positionX + directions[di].x;
-
-  const isFrontOutWall = isOutInMaze(maze, nextPositionX, nextPositionY);
-
-  const isFrontWall = isFrontOutWall ? false : maze[nextPositionY][nextPositionX] === 'wall';
-
-  const leftPositionY = nextPositionY + left[di].y;
-  const leftPositionX = nextPositionX + left[di].x;
-  const isLeftOut = isOutInMaze(maze, leftPositionX, leftPositionY);
-  const isLeftPath = isLeftOut ? false : maze[leftPositionY][leftPositionX] !== 'wall';
-
-  if (isFrontOutWall) {
-    return {
-      type: 'changeDirection',
-      newPositionY: positionY,
-      newPositionX: positionX,
-      newDirection: frontWall[di],
-    };
-  } else if (isFrontWall) {
-    return {
-      type: 'changeDirection',
-      newPositionY: positionY,
-      newPositionX: positionX,
-      newDirection: frontWall[di],
-    };
-  } else if (isLeftPath) {
-    return {
-      type: 'forwardAndChangeDicrection',
-      newPositionY: nextPositionY,
-      newPositionX: nextPositionX,
-      newDirection: upperLeft[di],
-    };
-  }
-
-  //真っ直ぐ進む
-  return {
-    type: 'forward',
-    newPositionY: nextPositionY,
-    newPositionX: nextPositionX,
-    newDirection: di,
-  };
 };
 
 export const displayRouteInMaze = (

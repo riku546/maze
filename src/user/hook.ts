@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { stepInto } from '../Maze/lib';
 import type { Maze } from '../Maze/type';
+import { stepInto } from './lib';
 import { initialUserInfo, type UserInfo } from './type';
 
 const useUser = () => {
