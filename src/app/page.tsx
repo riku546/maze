@@ -20,10 +20,11 @@ export default function Home() {
   // 早期リターンの前にフックは必ず呼び出す
 
   const isFinishedSearch = maze?.[userInfo.positionY]?.[userInfo.positionX] === 'goal';
+  const isNotStart = !maze || maze[0][0] === 'start';
 
   useEffect(() => {
     // maze が未定義 or スタートセル or 探索完了時は何もしない
-    if (!maze || maze[0][0] === 'start') return;
+    if (isNotStart) return;
 
     const interval = setInterval(() => updateUserInfo(maze), searchSpeed[mazeType]);
 
@@ -33,7 +34,7 @@ export default function Home() {
     }
 
     return () => clearInterval(interval);
-  }, [maze, updateUserInfo, isFinishedSearch, mazeType]);
+  }, [maze, isNotStart, updateUserInfo, isFinishedSearch, mazeType]);
 
   if (!maze) return <div />;
 
