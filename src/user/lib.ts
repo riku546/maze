@@ -51,6 +51,7 @@ interface Forward extends StepBase {
 
 type StepIntoResponse = Forward | FrontWall | LeftIspath;
 
+//ユーザーの情報（位置、向き）と周りの状態から、ユーザーが次に取る行動を返す関数。
 export const stepInto = (
   maze: Maze,
   positionY: number,
